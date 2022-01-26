@@ -1,0 +1,49 @@
+library(shiny) # Cargamos la librería 
+# Añadimos elementos a la aplicación como argumentos 
+ui <- fluidPage(
+  # 'Primera prueba',
+  titlePanel('Barras deslizadoras'), #Título de la aplicación 
+# Barra de números enteros
+  sliderInput(inputId = "num",
+              label = "Números enteros",
+              value = 25, min = 1, max = 100, step=5, 
+              ticks = FALSE),
+# Barra de números decimales
+  sliderInput(inputId = 'dec',
+              label = 'Números decimales',
+              min = 0, max = 10,
+              value = 0.1, step = 0.1,ticks = FALSE),
+# Barra de selección de rango 
+  sliderInput(inputId = 'rango',
+              label = 'Selección por intervalo',
+              min = 1, max = 1000, value = c(400, 600),ticks = TRUE),
+# Barra con animación básica
+  sliderInput(inputId = 'format',
+              label = 'Animación básica sin loop',
+              min = 0, max = 10000, 
+              value = 0, step = 500,
+              pre = '$', sep = ',', animate = TRUE),
+# Barra de animación  
+  sliderInput( 'anim', 'Animación',
+               min = 1, max = 2000,
+               value = 1, step = 10,
+               animate = animationOptions(interval = 100, loop = TRUE))
+
+)
+
+server <- function(input, output) {}
+
+shinyApp(server = server, ui = ui)
+
+
+ui <- fluidPage(
+  # Application title
+  titlePanel("Animación Sencilla de un Histograma"),
+  # Sidebar with a slider input for the number of bins
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("bins",
+                  "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 1, step = 1,
