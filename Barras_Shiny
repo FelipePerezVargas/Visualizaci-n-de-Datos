@@ -36,14 +36,3 @@ server <- function(input, output) {}
 shinyApp(server = server, ui = ui)
 
 
-ui <- fluidPage(
-  # Application title
-  titlePanel("Animación Sencilla de un Histograma"),
-  # Sidebar with a slider input for the number of bins
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 1, step = 1,
