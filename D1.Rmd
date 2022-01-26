@@ -1,0 +1,161 @@
+---
+title: "Libros"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+# Cargamos las librerias
+library(flexdashboard)
+library(tidyverse)
+library(highcharter)
+library(gt)
+library(htmltools)
+library(viridis)
+library(glue)
+
+```
+```{r}
+# Importamos los datos
+df<-read.csv("~/Shiny/bestsellers with categories.csv") 
+  
+# Removemos las entradas duplicadas
+df<- df %>%
+  distinct(Name, .keep_all=TRUE) %>%
+  rename(User_Rating='User.Rating')
+
+```
+Libros
+
+
+
+Column {.tabset .tabset-fade data-width=650}
+-----------------------------------------------------------------------
+### Autores más populares 
+
+
+```{r}
+#Colores
+custom_colors<-viridis::mako(n=15)
+
+# Autores más populares por reseñas
+df %>% 
+  group_by(Author)%>%
+  summarise(Reviews=sum(Reviews))%>%
+  arrange(desc(Reviews))%>%
+  head(15)%>%
+  hchart('column', hcaes(x=Author, y=Reviews, color=custom_colors))%>%
+  hc_add_theme(hc_theme_google())%>%
+  hc_tooltip(pointFormat='<b>Número de reseñas: </b> {point.y} <br>')%>%
+  hc_title(text='Autores más populares del 2009 al 2019',
+           style=list(fontSize='25px', fontWeight='bold'))%>%
+  hc_subtitle(text='Por número de reseñas',
+              style=list(fontSize='16px'))%>%
+  hc_credits(enabled=TRUE, text='@Felipe')
+  
+```
+
+### Libros más populares
+
+```{r}
+# Colores
+custom_colors<- viridis::plasma(n=15)
+
+# Libros más pópulares por reseñas
+df %>%
+  arrange(desc(Reviews))%>%
+  head(15)%>%
+  hchart('bar', hcaes(x=Name, y=Reviews, color=custom_colors))%>%
+  hc_add_theme(hc_theme_alone())    %>%
+  hc_tooltip(pointFormat='<b>Número de reseñas: </b> {point.y} <br>')%>%
+  hc_title(text='Libros más populares del 2009 al 2019',
+           style=list(fontSize='25px', fontWeight='bold'))%>%
+  hc_subtitle(text='Por número de reseñas',
+              style=list(fontSize='16px'))%>%
+  hc_credits(enabled=TRUE, text='@Felipe')
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### {.no-padding}
+
+```{r}
+# Colores
+custom_colors=viridis::inferno(n=2)
+df%>%
+  group_by(Genre)%>%
+  summarise(count=n())%>%
+  hchart('pie', hcaes(x=Genre, y=count, color=custom_colors))%>%
+  hc_add_theme(hc_theme_chalk())%>%
+  hc_tooltip(pointFormat='<b>Proporción: </b> {point.percentage:,.2f}%')%>%
+  hc_title(text='Genero más común del 2009 al 2019',
+           style=list(fontSize='25px', fontWeight='bold'))%>%
+    hc_credits(enabled=TRUE, text='@Felipe')
+
+```
+
+### {.no-padding}
+
+```{r}
+
+
+# # Vamos a hacer una tabla 
+# df1<- df %>%
+#   filter(User_Rating>=4.9)%>%
+#   arrange(desc(Reviews))%>%
+#   select(Name,Author)
+# # Tabla HTML
+#  div(style='height:600px; overflow-y:scroll', gt(df1))%>%
+#    tab_header(title = md('Mejores libros  del 2009 al 2019'),
+#               subtitle = md('Por Usuarios Rankeados'))%>%
+#    opt_table_font(font=list(google_font('Chivo'), default_fonts()))%>%
+#    tab_style(location=cells_column_labels(columns = everything()),
+#              style = list(cell_borders(sides='bottom', weight = px(2)),
+#                           cell_text(weight = 'bold')))%>%
+#    tab_options(table.font.size = px(12L),
+#                table.border.top.style='none',
+#                column_labels.border.bottom.width=2,
+#                table_body.border.top.style = 'none',
+#                data_row.padding=px(3)
+#    )
+
+# # Define the start and end dates for the data range
+# start_date <- "2010-06-07"
+# end_date <- "2010-06-14"
+# 
+# # Create a gt table based on preprocessed
+# # `sp500` table data
+# sp500 %>%
+#   filter(date >= start_date & date <= end_date) %>%
+#   select(-adj_close) %>%
+#   gt() %>%
+#   tab_header(
+#     title = "S&P 500",
+#     subtitle = glue("{start_date} to {end_date}")
+#   ) %>%
+#   fmt_date(
+#     columns = date,
+#     date_style = 3
+#   ) %>%
+#   fmt_currency(
+#     columns = c(open, high, low, close),
+#     currency = "USD"
+#   ) %>%
+#   fmt_number(
+#     columns = volume,
+#     suffixing = TRUE
+#   )
+
+                   
+
+
+  
+
+
+
+
+```
+
