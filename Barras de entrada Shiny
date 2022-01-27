@@ -1,0 +1,41 @@
+# En este código podemos encontrar de manera resumida algunas entradas que permite la aplicación de Shiny
+
+animales <- c("Perro", "Gato", "Ratón", "Aves", "Otro", "No me gustan los animales")
+
+ui <- fluidPage(
+  titlePanel(p('Otras entradas', style = "color:#3474A7")),
+  tags$hr(),
+  # Valores Numéricos
+  numericInput("num", "Cuántos años Tienes", value = 0, min = 0, max = 100),
+  tags$hr(),
+  # Entrada de fecha Única
+  dateInput("dob", "Cuándo Naciste?"),
+  tags$hr(),
+  # Entrada de Rango de fechas 
+  dateRangeInput("holiday", "Fecha de tus Próximas Vacaciones?"),
+  tags$hr(),
+  # Lista de selección única
+  radioButtons("animal", "Cuál es tu animal favorito?", animales),
+  tags$hr(),
+  # Selección de caja para selección multiple
+  checkboxGroupInput("animal", "What animals do you like?", animales),
+  tags$hr(),
+  # Lista desplegable con selección multiple
+  selectInput("state", "Cuál es tu estado Favorito?", state.name,
+              multiple = TRUE),
+  tags$hr(),
+  # Botón de selección
+  radioButtons("rb", "Cómo te sientes:",
+               choiceNames = list(
+                 icon("angry"),
+                 icon("smile"),
+                 icon("sad-tear")
+               ),
+               choiceValues = list("angry", "happy", "sad")),
+  tags$hr()
+  
+)
+
+server <- function(input, output) {}
+
+shinyApp(ui, server)
