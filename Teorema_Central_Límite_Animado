@@ -1,0 +1,33 @@
+Teorema central del límite en animación con loop, animación sencilla y sin animación
+
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Teorema Central de Límite"),
+  sidebarLayout(
+    sidebarPanel(
+      #numericInput("m", "Número de Muestras:", 20, min = 1, max = 100)
+      sliderInput("bins",
+                  "Número de bins:",
+                  min = 1,
+                  max = 100,
+                  value = 1, step = 1,
+                  animate = TRUE)
+      # sliderInput( 'anim', 'Animación',
+      #              min = 1, max = 100,
+      #              value = 1, step = 1,
+      #              animate = animationOptions(interval = 2, loop = TRUE))
+    ),
+    mainPanel(
+      plotOutput("hist")
+    )
+  )
+)
+server <- function(input, output, session) {
+  output$hist <- renderPlot({
+    means <- replicate(1e4, mean(runif(input$anim)))
+    hist(means, breaks = 20)
+  }, res = 96)
+}
+
+shinyApp(ui, server)
